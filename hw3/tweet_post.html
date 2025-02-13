@@ -1,0 +1,101 @@
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin=”anonymous”></script>
+    <style>
+        input {
+            width: 300px;
+            height: 25px;
+            border: 2px solid royalblue;
+            font-size: 16px;
+        }
+        .count {
+            color: lightgrey;
+        }
+        .red {
+            color: red;
+            font-weight: bold;
+        }
+        button:disabled {
+            background-color: lightgray;
+        }
+        .tweet {
+            border: 1px solid black;
+            width: 300px;
+            padding: 3px;
+        }
+        pre {
+            display: inline;
+        }
+
+    </style>
+    <script>
+        let maxChars = 30;
+        let username = "jennifer";
+
+        function decrementCount() {
+            maxChars--;
+            if (maxChars < 0) {
+                $(".count").addClass("red");
+                $("#post").prop("disabled", true);
+            }
+            if (maxChars <= 30) {
+                $(".count").text(maxChars)
+            }
+        }
+
+        function incrementCount() {
+            maxChars++;
+            if (maxChars >= 0) {
+                $(".count").removeClass("red");
+                $("#post").prop("disabled", false);
+            }
+            if (maxChars <= 30) {
+                $(".count").text(maxChars)
+            }
+        }
+
+        function createPost(text) {
+            if (/\S/.test(text)) {
+                let post = $("<div>").addClass("tweet");
+                post.html("<strong>" + username + "  </strong><pre>" + text +
+                    "</pre>");
+                $("#feed").prepend(post);
+
+                // resets input, maxCount, and replaces cursor
+                $("input").val("").focus();
+                maxChars = 30
+                $(".count").text(maxChars);
+                console.log("Tweet post: " + text);
+            }
+        }
+
+        $(document).ready(function() {
+            $("input").on("keydown", function(event) {
+                console.log("keydown event");
+                if (event.keyCode === 8) {
+                    // if backspaced
+                    incrementCount();
+                }
+                else if (event.keyCode === 13) {
+                    createPost($("input").val());
+                }
+                else {
+                    decrementCount();
+                }
+
+            })
+            $("#post").click(function() {
+                createPost($("input").val());
+            })
+        })
+    </script>
+</head>
+<body>
+    Write me a tweet<br>
+    <input type="text"><br>
+    <span class="count">30</span>
+    <button id="post">Post Tweet</button>
+    <br><br><br><br>POSTS
+    <div id="feed"></div>
+</body>
+</html>
