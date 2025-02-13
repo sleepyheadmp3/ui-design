@@ -1,6 +1,6 @@
 <html>
 <head>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin=”anonymous”></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
     <style>
         input {
             width: 300px;
@@ -26,7 +26,6 @@
         pre {
             display: inline;
         }
-
     </style>
     <script>
         let maxChars = 30;
@@ -64,7 +63,7 @@
                 // resets input, maxCount, and replaces cursor
                 $("input").val("").focus();
                 maxChars = 30
-                $(".count").text(maxChars);
+                $(".count").text(maxChars).removeClass("red");
                 console.log("Tweet post: " + text);
             }
         }
@@ -72,14 +71,16 @@
         $(document).ready(function() {
             $("input").on("keydown", function(event) {
                 console.log("keydown event");
-                if (event.keyCode === 8) {
+                if (event.keyCode === 13 && !$(".count").hasClass("red")) {
+                    // enter key
+                    createPost($("input").val());
+                }
+                else if (event.keyCode === 8) {
                     // if backspaced
                     incrementCount();
                 }
-                else if (event.keyCode === 13) {
-                    createPost($("input").val());
-                }
-                else {
+                else if (event.keyCode !== 13) {
+                    // to ensure enter key doesn't decrement count
                     decrementCount();
                 }
 
